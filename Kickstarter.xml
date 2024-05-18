@@ -1,0 +1,54 @@
+<Schema name="New Schema1">
+  <Dimension type="StandardDimension" visible="true" name="Project">
+    <Hierarchy name="dim_project" visible="true" hasAll="true" allMemberName="SemuaProject" primaryKey="DimProject_id">
+      <Table name="DimProject" schema="dbo" alias="">
+      </Table>
+      <Level name="Project" visible="true" column="project_id" nameColumn="project_name" ordinalColumn="project_id" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Blurb" visible="true" column="blurb" uniqueMembers="false">
+      </Level>
+      <Level name="Category" visible="true" column="category_name" uniqueMembers="false">
+      </Level>
+      <Level name="Backers" visible="true" column="backers_count" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" name="Financial">
+    <Hierarchy name="dim_financial" visible="true" hasAll="true" allMemberName="SemuaFinancial" primaryKey="DimFinancial_id">
+      <Table name="DimFinancial" schema="dbo" alias="">
+      </Table>
+      <Level name="Goal" visible="true" column="goal" nameColumn="goal" uniqueMembers="false">
+      </Level>
+      <Level name="Pledged" visible="true" column="pledged" nameColumn="pledged" uniqueMembers="false">
+      </Level>
+      <Level name="USD Pledge" visible="true" column="pledged" nameColumn="usd_pledged" uniqueMembers="false">
+      </Level>
+      <Level name="Converted Pledge" visible="true" column="converted_pledged_amount" nameColumn="converted_pledged_amount" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" name="Time">
+    <Hierarchy name="dim_time" visible="true" hasAll="true" primaryKey="DimTime_id">
+      <Table name="DimTime" schema="dbo" alias="">
+      </Table>
+      <Level name="Created" visible="true" column="created_at" nameColumn="created_at" uniqueMembers="false">
+      </Level>
+      <Level name="Deadline" visible="true" column="deadline" nameColumn="deadline" parentColumn="deadline" uniqueMembers="false">
+      </Level>
+      <Level name="Launched" visible="true" column="launched_at" parentColumn="launched_at" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="Kickstarter" visible="true" cache="true" enabled="true">
+    <Table name="FactCampaign" schema="dbo" alias="">
+    </Table>
+    <DimensionUsage source="Project" name="Project" visible="true" foreignKey="DimProject_id">
+    </DimensionUsage>
+    <DimensionUsage source="Financial" name="Financial" visible="true" foreignKey="DimFinancial_id">
+    </DimensionUsage>
+    <DimensionUsage source="Time" name="Time" visible="true" foreignKey="DimTime_id">
+    </DimensionUsage>
+    <Measure name="Pledge Disparity" column="pledge_disparity" aggregator="distinct-count" visible="true">
+    </Measure>
+  </Cube>
+</Schema>
